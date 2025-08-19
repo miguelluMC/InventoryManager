@@ -11,9 +11,6 @@ using System.Windows.Shapes;
 
 namespace InventoryManager
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -23,17 +20,17 @@ namespace InventoryManager
 
         private void OpenProductsModule(object sender, RoutedEventArgs e)
         {
-            // Abrir ventana de gestión de productos
+            
         }
 
         private void OpenInventoryModule(object sender, RoutedEventArgs e)
         {
-            // Abrir ventana de control de inventario
+            
         }
 
         private void OpenSuppliersModule(object sender, RoutedEventArgs e)
         {
-            // Abrir ventana de control de inventario
+            
         }
 
         private void OpenPurchaseOrdersModule(object sender, RoutedEventArgs e)
