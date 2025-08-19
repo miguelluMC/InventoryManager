@@ -1,0 +1,341 @@
+﻿<Window x:Class="InventoryManager.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InventoryManager"
+        mc:Ignorable="d"
+        Title="Iniciar Sesión - Sistema de Inventario" 
+        Height="600" Width="900"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.Resources>
+        <!-- Gradientes y colores -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="PrimaryColor" Color="#3498DB"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#2C3E50"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#E74C3C"/>
+
+        <!-- Estilo para TextBox personalizados -->
+        <Style x:Key="LoginTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="#E8E8E8"
+                                BorderThickness="1">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        VerticalAlignment="Center"
+                                        Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para PasswordBox personalizado -->
+        <Style x:Key="LoginPasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderBrush="#E8E8E8"
+                                BorderThickness="1">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        VerticalAlignment="Center"
+                                        Padding="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para botón de login -->
+        <Style x:Key="LoginButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#21618C"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDC3C7"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para botones secundarios -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#2980B9"/>
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Animación de carga -->
+        <Storyboard x:Key="LoadingAnimation" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="LoadingEllipse"
+                           Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                           From="0" To="360" Duration="0:0:1"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <!-- Contenedor principal con sombra -->
+    <Border Background="{StaticResource BackgroundGradient}" CornerRadius="15">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Direction="270" ShadowDepth="10" BlurRadius="20" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Panel izquierdo - Branding -->
+            <Border Grid.Column="0" Background="White" Opacity="0.1" CornerRadius="15,0,0,15"/>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="📦" FontSize="80" HorizontalAlignment="Center" 
+                          Foreground="White" Margin="0,0,0,20"/>
+                <TextBlock Text="Sistema de Inventario" 
+                          FontSize="24" FontWeight="Bold" 
+                          Foreground="White" HorizontalAlignment="Center" 
+                          TextAlignment="Center" Margin="0,0,0,10"/>
+                <TextBlock Text="Gestión Inteligente de Stock" 
+                          FontSize="14" 
+                          Foreground="#E8E8E8" HorizontalAlignment="Center" 
+                          TextAlignment="Center" Margin="0,0,0,40"/>
+
+                <!-- Características -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                    <TextBlock Text="✓" Foreground="#2ECC71" FontWeight="Bold" Margin="0,0,8,0"/>
+                    <TextBlock Text="Control total de inventario" Foreground="White" FontSize="12"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                    <TextBlock Text="✓" Foreground="#2ECC71" FontWeight="Bold" Margin="0,0,8,0"/>
+                    <TextBlock Text="Reportes en tiempo real" Foreground="White" FontSize="12"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="✓" Foreground="#2ECC71" FontWeight="Bold" Margin="0,0,8,0"/>
+                    <TextBlock Text="Interfaz intuitiva y moderna" Foreground="White" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Panel derecho - Formulario de login -->
+            <Border Grid.Column="1" Background="White" CornerRadius="0,15,15,0">
+                <StackPanel VerticalAlignment="Center" Margin="50">
+
+                    <!-- Header del formulario -->
+                    <TextBlock Text="Iniciar Sesión" 
+                              FontSize="28" FontWeight="Bold" 
+                              Foreground="{StaticResource SecondaryColor}" 
+                              HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Ingresa tus credenciales para acceder al sistema" 
+                              FontSize="14" 
+                              Foreground="#7F8C8D" 
+                              HorizontalAlignment="Center" 
+                              TextAlignment="Center"
+                              Margin="0,0,0,40"/>
+
+                    <!-- Campo Usuario -->
+                    <TextBlock Text="Usuario" FontWeight="SemiBold" 
+                              Foreground="{StaticResource SecondaryColor}" Margin="0,0,0,5"/>
+                    <TextBox x:Name="UsernameTextBox" 
+                            Style="{StaticResource LoginTextBoxStyle}"
+                            Text="admin"
+                            KeyDown="OnKeyDown"
+                            Margin="0,0,0,20">
+                        <TextBox.Tag>
+                            <TextBlock Text="Ingresa tu nombre de usuario" 
+                                      Foreground="#BDC3C7" FontStyle="Italic"
+                                      IsHitTestVisible="False" 
+                                      VerticalAlignment="Center" 
+                                      HorizontalAlignment="Left" 
+                                      Margin="15,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=UsernameTextBox}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </TextBox.Tag>
+                    </TextBox>
+
+                    <!-- Campo Contraseña -->
+                    <TextBlock Text="Contraseña" FontWeight="SemiBold" 
+                              Foreground="{StaticResource SecondaryColor}" Margin="0,0,0,5"/>
+                    <PasswordBox x:Name="PasswordBox" 
+                                Style="{StaticResource LoginPasswordBoxStyle}"
+                                KeyDown="OnKeyDown"
+                                Margin="0,0,0,10"/>
+
+                    <!-- Recordar sesión y Olvidé contraseña -->
+                    <Grid Margin="0,0,0,30">
+                        <CheckBox Content="Recordar sesión" 
+                                 x:Name="RememberMeCheckBox"
+                                 Foreground="{StaticResource SecondaryColor}" 
+                                 VerticalAlignment="Center"/>
+                        <Button Content="¿Olvidaste tu contraseña?" 
+                               Style="{StaticResource SecondaryButtonStyle}"
+                               HorizontalAlignment="Right"
+                               Click="ForgotPassword_Click"/>
+                    </Grid>
+
+                    <!-- Botón de login -->
+                    <Button x:Name="LoginButton" 
+                           Content="Iniciar Sesión" 
+                           Style="{StaticResource LoginButtonStyle}"
+                           Click="Login_Click"
+                           Margin="0,0,0,20"/>
+
+                    <!-- Indicador de carga -->
+                    <StackPanel x:Name="LoadingPanel" 
+                               Orientation="Horizontal" 
+                               HorizontalAlignment="Center"
+                               Visibility="Collapsed">
+                        <Ellipse x:Name="LoadingEllipse" 
+                                Width="20" Height="20" 
+                                Fill="{StaticResource PrimaryColor}"
+                                Margin="0,0,10,0">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform CenterX="10" CenterY="10"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <TextBlock Text="Verificando credenciales..." 
+                                  Foreground="{StaticResource PrimaryColor}"
+                                  VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Mensaje de error -->
+                    <Border x:Name="ErrorPanel" 
+                           Background="#FFE6E6" 
+                           BorderBrush="{StaticResource AccentColor}" 
+                           BorderThickness="1" 
+                           CornerRadius="5" 
+                           Padding="15,10"
+                           Visibility="Collapsed"
+                           Margin="0,10,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠️" Margin="0,0,10,0"/>
+                            <TextBlock x:Name="ErrorMessage" 
+                                      Text="Usuario o contraseña incorrectos" 
+                                      Foreground="{StaticResource AccentColor}"
+                                      FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Información adicional -->
+                    <TextBlock Text="¿No tienes cuenta? Contacta al administrador" 
+                              FontSize="12" 
+                              Foreground="#95A5A6" 
+                              HorizontalAlignment="Center" 
+                              Margin="0,30,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Botón para cerrar -->
+            <Button Grid.Column="1" 
+                   Content="✕" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Top" 
+                   Width="30" Height="30" 
+                   Background="Transparent" 
+                   BorderThickness="0" 
+                   Foreground="#95A5A6" 
+                   FontSize="16" 
+                   Cursor="Hand"
+                   Margin="0,15,15,0"
+                   Click="CloseButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E8E8E8"/>
+                                <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Border>
+</Window>
